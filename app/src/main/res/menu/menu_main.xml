@@ -1,0 +1,22 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.lab.mango.villains.notebook.MainActivity">
+    <item
+        android:id="@+id/action_subscribe"
+        android:orderInCategory="100"
+        android:title="구독하기"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_channer"
+        android:orderInCategory="100"
+        android:title="채널로 이동"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/about"
+        android:orderInCategory="100"
+        android:title="공유하기"
+        app:showAsAction="never" />
+</menu>

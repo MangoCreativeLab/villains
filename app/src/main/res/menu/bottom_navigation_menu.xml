@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/action_notebook"
+        app:showAsAction="ifRoom"
+        android:enabled="true"
+        android:icon="@android:drawable/ic_dialog_email"
+        android:title="사건 수첩" />
+    <item
+        android:id="@+id/action_money"
+        app:showAsAction="ifRoom"
+        android:icon="@android:drawable/ic_menu_search"
+        android:title="수익금" />
+    <item
+        android:id="@+id/action_setting"
+        app:showAsAction="ifRoom"
+        android:enabled="true"
+        android:icon="@android:drawable/ic_menu_manage"
+        android:title="사용자 설정" />
+</menu>
