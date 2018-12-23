@@ -1,70 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical">
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:layout_marginBottom="16dp"
-        android:text="1. 사건 개요"
-        android:textAppearance="@android:style/TextAppearance.Material.Title"
-        android:textStyle="bold" />
 
     <com.pierfrancescosoffritti.androidyoutubeplayer.player.YouTubePlayerView
         android:id="@+id/youtube_player_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:layout_marginBottom="16dp"
-        android:text="2. 힌트"
-        android:textAppearance="@android:style/TextAppearance.Material.Title"
-        android:textStyle="bold" />
-
-    <TextView
-        android:id="@+id/hint"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="8dp"
-        android:text="유명한 사립 탐정 '코난' 납치?"
-        android:textAppearance="@android:style/TextAppearance.Material.Body1"
-        android:textStyle="italic" />
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="8dp"
-        android:text="화면 속 검은 가면의 남자의 정체는..?"
-        android:textAppearance="@android:style/TextAppearance.Material.Body1"
-        android:textStyle="italic" />
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:layout_marginBottom="16dp"
-        android:text="3. 범인은?"
-        android:textAppearance="@android:style/TextAppearance.Material.Title"
-        android:textStyle="bold" />
-
-    <com.andrognito.patternlockview.PatternLockView
-        android:id="@+id/patternView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@android:color/background_dark"
-        app:correctStateColor="#ff0000"
-        app:dotCount="3"
-        app:dotNormalSize="10dp"
-        app:dotSelectedSize="3dp"
-        app:normalStateColor="#fafafa"
-        app:pathWidth="3dp" />
 </LinearLayout>

@@ -29,6 +29,7 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".note.NoteActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden|smallestScreenSize|screenLayout"
             android:label="@string/title_activity_note"
             android:theme="@style/AppTheme.NoActionBar"/>
     </application>

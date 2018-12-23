@@ -1,36 +1,43 @@
 package com.lab.mango.villains.notedetail;
 
+import android.content.pm.ActivityInfo;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
+import android.view.WindowManager;
 
-import com.andrognito.patternlockview.PatternLockView;
-import com.andrognito.patternlockview.listener.PatternLockViewListener;
 import com.lab.mango.villains.R;
 import com.lab.mango.villains.data.NoteDetail;
+import com.lab.mango.villains.notedetail.answer.AnswerDialogFragment;
+import com.lab.mango.villains.notedetail.youtube.CustomPlayerUIController;
+import com.pierfrancescosoffritti.androidyoutubeplayer.player.IFramePlayerOptions;
 import com.pierfrancescosoffritti.androidyoutubeplayer.player.YouTubePlayer;
 import com.pierfrancescosoffritti.androidyoutubeplayer.player.YouTubePlayerView;
 import com.pierfrancescosoffritti.androidyoutubeplayer.player.listeners.AbstractYouTubePlayerListener;
+import com.pierfrancescosoffritti.androidyoutubeplayer.player.listeners.YouTubePlayerFullScreenListener;
 import com.pierfrancescosoffritti.androidyoutubeplayer.player.listeners.YouTubePlayerInitListener;
-
-import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 
 public class NoteDetailFragment extends Fragment implements NoteDetailContract.View {
 
     private NoteDetailContract.Presenter mPresenter;
 
+    // https://github.com/PierfrancescoSoffritti/android-youtube-player
     private YouTubePlayerView mYoutubePlayerView;
 
-    private TextView mHintTextView;
+    private YouTubePlayer mYouTubePlayer;
 
-    private PatternLockView mPatternLockView;
+    private CustomPlayerUIController mCustomPlayerUIController;
+
+    private YouTubePlayerFullScreenListener mYouTubePlayerFullScreenListener;
+
+    private IFramePlayerOptions mFramePlayerOptions;
 
     public static NoteDetailFragment newInstance() {
         NoteDetailFragment fragment = new NoteDetailFragment();
@@ -53,8 +60,54 @@ public class NoteDetailFragment extends Fragment implements NoteDetailContract.V
         mYoutubePlayerView = view.findViewById(R.id.youtube_player_view);
         getLifecycle().addObserver(mYoutubePlayerView);
 
-        mHintTextView = view.findViewById(R.id.hint);
-        mPatternLockView = view.findViewById(R.id.patternView);
+        mYoutubePlayerView.inflateCustomPlayerUI(R.layout.note_detail_youtube_player_ui);
+        mCustomPlayerUIController = new CustomPlayerUIController(mYoutubePlayerView, new CustomPlayerUIController.AnswerButtonClickListener() {
+            @Override
+            public void onAnswerButtonClick() {
+                AnswerDialogFragment fragment = AnswerDialogFragment.newInstance();
+                FragmentManager fragmentManager = getFragmentManager();
+                if (fragmentManager != null) {
+                    fragmentManager.beginTransaction().add(fragment, "AnswerDialogFragment").commit();
+                }
+            }
+        });
+
+        mYouTubePlayerFullScreenListener = new YouTubePlayerFullScreenListener() {
+            @Override
+            public void onYouTubePlayerEnterFullScreen() {
+                setFullScreen(true);
+            }
+
+            @Override
+            public void onYouTubePlayerExitFullScreen() {
+                setFullScreen(false);
+            }
+        };
+
+        mYoutubePlayerView.addFullScreenListener(mYouTubePlayerFullScreenListener);
+        if (isFullScreen()) {
+            mYoutubePlayerView.enterFullScreen();
+        }
+
+        // https://developers.google.com/youtube/player_parameters#Parameters
+        mFramePlayerOptions = new IFramePlayerOptions.Builder()
+                .controls(0)
+                .modestBranding(1)
+                .rel(0)
+                .showInfo(0)
+                .build();
+
+        ((NoteDetailActivity) getActivity()).setOnBackClickListener(new NoteDetailActivity.OnBackClickListener() {
+            @Override
+            public boolean onBackClick() {
+                if (isFullScreen()) {
+                    mYoutubePlayerView.exitFullScreen();
+                    return true;
+                }
+                return false;
+            }
+        });
+
         return view;
     }
 
@@ -74,12 +127,16 @@ public class NoteDetailFragment extends Fragment implements NoteDetailContract.V
         super.setUserVisibleHint(isVisibleToUser);
         if (isVisibleToUser) {
             mPresenter.start();
+        } else {
+            pausePlayer();
         }
     }
 
     @Override
     public void onDestroyView() {
+        mYoutubePlayerView.removeFullScreenListener(mYouTubePlayerFullScreenListener);
         mYoutubePlayerView.release();
+        mYouTubePlayer = null;
         super.onDestroyView();
     }
 
@@ -94,45 +151,78 @@ public class NoteDetailFragment extends Fragment implements NoteDetailContract.V
             return;
         }
 
-        if (getUserVisibleHint()) {
-            ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(noteDetail.getTitle());
+        if (mYouTubePlayer != null) {
+            return;
         }
 
-
-        mHintTextView.setText(noteDetail.getHint());
         mYoutubePlayerView.initialize(new YouTubePlayerInitListener() {
             @Override
             public void onInitSuccess(@NonNull final YouTubePlayer initializedYouTubePlayer) {
+
+                initializedYouTubePlayer.addListener(mCustomPlayerUIController);
                 initializedYouTubePlayer.addListener(new AbstractYouTubePlayerListener() {
                     @Override
                     public void onReady() {
+                        mYouTubePlayer = initializedYouTubePlayer;
+
+                        mCustomPlayerUIController.setYouTubePlayer(initializedYouTubePlayer);
                         String videoId = noteDetail.getYoutubeUrl();
-                        initializedYouTubePlayer.loadVideo(videoId, 0);
+//                        initializedYouTubePlayer.loadVideo(videoId, 0);
+                        initializedYouTubePlayer.cueVideo(videoId, 0);
+                        pausePlayer();
+
                     }
                 });
             }
-        }, true);
+        }, true, mFramePlayerOptions);
+    }
 
-        mPatternLockView.addPatternLockListener(new PatternLockViewListener() {
+    private void pausePlayer() {
+        if (mYoutubePlayerView == null) {
+            return;
+        }
+
+        mYoutubePlayerView.post(new Runnable() {
             @Override
-            public void onStarted() {
-
-            }
-
-            @Override
-            public void onProgress(List progressPattern) {
-
-            }
-
-            @Override
-            public void onComplete(List pattern) {
-
-            }
-
-            @Override
-            public void onCleared() {
-
+            public void run() {
+                if (mYouTubePlayer != null) {
+                    mYouTubePlayer.pause();
+                }
             }
         });
+    }
+
+    private void setFullScreen(boolean fullscreen) {
+        if (getActivity() == null) {
+            return;
+        }
+
+        WindowManager.LayoutParams attrs = getActivity().getWindow().getAttributes();
+        if (fullscreen) {
+            attrs.flags |= WindowManager.LayoutParams.FLAG_FULLSCREEN;
+            getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+        } else {
+            attrs.flags &= ~WindowManager.LayoutParams.FLAG_FULLSCREEN;
+            getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        }
+        getActivity().getWindow().setAttributes(attrs);
+    }
+
+    private boolean isFullScreen() {
+        if (getActivity() == null) {
+            return false;
+        }
+
+        return (getActivity().getWindow().getAttributes().flags & WindowManager.LayoutParams.FLAG_FULLSCREEN) != 0;
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        if (isFullScreen()) {
+            mYoutubePlayerView.enterFullScreen();
+        } else {
+            mYoutubePlayerView.exitFullScreen();
+        }
     }
 }

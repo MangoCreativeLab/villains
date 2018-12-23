@@ -27,12 +27,12 @@ public class NoteDetailActivity extends androidx.appcompat.app.AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.note_detail_activity);
 
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-
-        final String title = getIntent().getExtras().getString(EXTRA_TITLE);
-        ActionBar actionBar = getSupportActionBar();
-        actionBar.setTitle(title);
+//        Toolbar toolbar = findViewById(R.id.toolbar);
+//        setSupportActionBar(toolbar);
+//
+//        final String title = getIntent().getExtras().getString(EXTRA_TITLE);
+//        ActionBar actionBar = getSupportActionBar();
+//        actionBar.setTitle(title);
 
         mViewPager = findViewById(R.id.view_pager);
 
@@ -61,5 +61,23 @@ public class NoteDetailActivity extends androidx.appcompat.app.AppCompatActivity
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         return super.onOptionsItemSelected(item);
+    }
+
+    public interface OnBackClickListener {
+        boolean onBackClick();
+    }
+
+    private OnBackClickListener onBackClickListener;
+
+    public void setOnBackClickListener(OnBackClickListener onBackClickListener) {
+        this.onBackClickListener = onBackClickListener;
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (onBackClickListener != null && onBackClickListener.onBackClick()) {
+            return;
+        }
+        super.onBackPressed();
     }
 }
