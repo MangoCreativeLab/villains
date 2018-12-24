@@ -19,6 +19,8 @@ public class NoteCardFragment extends Fragment {
 
     private CardView mCardView;
 
+    private ViewGroup mContentRoot;
+
     private TextView mTitleTextView;
 
     private TextView mBodyTextView;
@@ -58,6 +60,7 @@ public class NoteCardFragment extends Fragment {
         mCardView.setMaxCardElevation(mCardView.getCardElevation()
                 * NoteCardAdapter.MAX_ELEVATION_FACTOR);
 
+        mContentRoot = mCardView.findViewById(R.id.content_root);
         mTitleTextView = mCardView.findViewById(R.id.title);
         mBodyTextView = mCardView.findViewById(R.id.body);
         mButton = mCardView.findViewById(R.id.button);
@@ -85,6 +88,22 @@ public class NoteCardFragment extends Fragment {
                 }
             }
         });
+
+        if (noteDetail.getCompleted()) {
+            mTitleTextView.setText(mTitleTextView.getText() + " 풀이 성공!!");
+            mButton.setText("노트 다시 보기");
+            mContentRoot.setBackgroundColor(getResources().getColor(R.color.complete_background));
+            mButton.setBackgroundColor(getResources().getColor(R.color.complete_background));
+        }
+
+        if (noteDetail.getPrepared()) {
+            mCardView.setEnabled(true);
+            mButton.setEnabled(true);
+        } else {
+            mCardView.setEnabled(false);
+            mButton.setEnabled(false);
+            mBodyTextView.setText("***");
+        }
     }
 
     @Override

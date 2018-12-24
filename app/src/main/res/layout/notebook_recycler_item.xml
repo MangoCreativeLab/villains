@@ -9,10 +9,20 @@
     app:cardUseCompatPadding="true">
 
     <ImageButton
-        android:id="@+id/imgae_button"
+        android:id="@+id/poster_imgae_button"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="center"
-        android:padding="16dp"></ImageButton>
+        android:padding="16dp" />
 
+    <TextView
+        android:id="@+id/complete_textview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/complete_background"
+        android:gravity="center"
+        android:padding="50dp"
+        android:text="검거 완료"
+        android:textColor="#ff0000"
+        android:textStyle="bold" />
 </androidx.cardview.widget.CardView>

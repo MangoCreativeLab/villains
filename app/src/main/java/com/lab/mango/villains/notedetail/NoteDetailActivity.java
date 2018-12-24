@@ -1,12 +1,13 @@
 package com.lab.mango.villains.notedetail;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
 import com.lab.mango.villains.R;
 import com.lab.mango.villains.data.Injection;
-import com.lab.mango.villains.data.source.NoteRepository;
 import com.lab.mango.villains.notedetail.viewpager.NoteDetailPagerAdapter;
 
 import java.util.ArrayList;
@@ -38,7 +39,7 @@ public class NoteDetailActivity extends androidx.appcompat.app.AppCompatActivity
         ArrayList<NoteDetailFragment> fragments = new ArrayList<>();
 
         final int[] noteDetailId = getIntent().getExtras().getIntArray(EXTRA_NOTE_DETAIL_IDs);
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < noteDetailId.length; i++) {
             NoteDetailFragment fragment = NoteDetailFragment.newInstance();
             fragments.add(fragment);
             new NoteDetailPresenter(noteDetailId[i], Injection.provideNotesRepository(getApplicationContext()), fragment);
@@ -77,6 +78,16 @@ public class NoteDetailActivity extends androidx.appcompat.app.AppCompatActivity
         if (onBackClickListener != null && onBackClickListener.onBackClick()) {
             return;
         }
+
         super.onBackPressed();
+    }
+
+    @Override
+    public void finish() {
+        Intent returnIntent = new Intent();
+        returnIntent.putExtra("currentPosition", mViewPager.getCurrentItem());
+        setResult(RESULT_OK, returnIntent);
+
+        super.finish();
     }
 }

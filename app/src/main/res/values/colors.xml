@@ -5,4 +5,7 @@
     <color name="colorAccent">#FF4081</color>
     <color name="navigation_background">#464646</color>
     <color name="window_background">#d4d4d4</color>
+
+    <color name="complete_background">#8a000000</color>
 </resources>
+

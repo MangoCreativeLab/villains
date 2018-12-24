@@ -5,6 +5,7 @@ import android.view.ViewGroup;
 import com.lab.mango.villains.data.NoteDetail;
 import com.lab.mango.villains.data.TestNoteDetailData;
 import com.lab.mango.villains.note.NoteFragment;
+import com.lab.mango.villains.utils.Const;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,8 +16,6 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentStatePagerAdapter;
 
 public class NoteCardFragmentPagerAdapter extends FragmentStatePagerAdapter implements NoteCardAdapter {
-
-    private static int NUM_ITEMS = TestNoteDetailData.NoteDetailCount;
 
     private NoteFragment.NoteDetailItemListener mNoteDetailItemListener;
     private List<NoteCardFragment> mFragments;
@@ -29,7 +28,7 @@ public class NoteCardFragmentPagerAdapter extends FragmentStatePagerAdapter impl
         mBaseElevation = baseElevation;
         mNoteDetailItemListener = noteDetailItemListener;
 
-        for (int i = 0; i < NUM_ITEMS; i++) {
+        for (int i = 0; i < Const.CARDVIEW_COUNT; i++) {
             addCardFragment(i);
         }
     }

@@ -40,13 +40,16 @@ public class NoteDetail {
     @ColumnInfo(name = "completed")
     private final boolean mCompleted;
 
+    @ColumnInfo(name = "prepared")
+    private final boolean mPrepared;
+
     @Ignore
-    public NoteDetail(@Nullable int noteId, @Nullable String title, @Nullable String description, String hint, String youtubeUrl, boolean completed) {
-        this(noteId, title, description, UUID.randomUUID().hashCode(), hint, youtubeUrl, completed);
+    public NoteDetail(@Nullable int noteId, @Nullable String title, @Nullable String description, String hint, String youtubeUrl, boolean completed, boolean prepared) {
+        this(noteId, title, description, UUID.randomUUID().hashCode(), hint, youtubeUrl, completed, prepared);
     }
 
     public NoteDetail(@Nullable int noteId, @Nullable String title, @Nullable String description,
-                      int id, String hint, String youtubeUrl, boolean completed) {
+                      int id, String hint, String youtubeUrl, boolean completed, boolean prepared) {
         mId = id;
         mNoteId = noteId;
         mTitle = title;
@@ -54,6 +57,7 @@ public class NoteDetail {
         mHint = hint;
         mYoutubeUrl = youtubeUrl;
         mCompleted = completed;
+        mPrepared = prepared;
     }
 
     public int getId() {
@@ -82,5 +86,9 @@ public class NoteDetail {
 
     public boolean getCompleted() {
         return mCompleted;
+    }
+
+    public boolean getPrepared() {
+        return mPrepared;
     }
 }

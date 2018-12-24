@@ -8,8 +8,10 @@
     app:cardUseCompatPadding="true">
 
     <RelativeLayout
+        android:id="@+id/content_root"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:duplicateParentState="true"
         android:gravity="center"
         android:padding="16dp">
 
@@ -19,6 +21,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
+            android:duplicateParentState="true"
             android:gravity="center"
             android:text="사건 노트" />
 
@@ -29,6 +32,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/title"
             android:layout_marginTop="16dp"
+            android:duplicateParentState="true"
             android:text="body" />
 
         <Button
@@ -37,6 +41,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_marginTop="16dp"
+            android:duplicateParentState="true"
             android:text="노트 보기" />
     </RelativeLayout>
 </androidx.cardview.widget.CardView>

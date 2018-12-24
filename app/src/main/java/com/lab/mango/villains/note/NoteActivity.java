@@ -6,7 +6,6 @@ import android.view.MenuItem;
 
 import com.lab.mango.villains.R;
 import com.lab.mango.villains.data.Injection;
-import com.lab.mango.villains.data.source.NoteRepository;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -36,7 +35,7 @@ public class NoteActivity extends AppCompatActivity {
         final Fragment notesFragment = NoteFragment.newInstance();
         final FragmentManager fm = getSupportFragmentManager();
 
-        fm.beginTransaction().add(R.id.fragment_container, notesFragment, "1").commit();
+        fm.beginTransaction().add(R.id.fragment_container, notesFragment, "notesFragment").commit();
 
         new NotePresenter(noteId, reward, Injection.provideNotesRepository(getApplicationContext()),
                 (NoteContract.View) notesFragment);

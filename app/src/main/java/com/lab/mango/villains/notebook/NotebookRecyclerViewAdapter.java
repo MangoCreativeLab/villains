@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.TextView;
 
 import com.lab.mango.villains.R;
 import com.lab.mango.villains.data.Note;
@@ -41,13 +42,19 @@ public class NotebookRecyclerViewAdapter extends RecyclerView.Adapter {
         final Note note = mNotes.get(position);
 
         final int image = note.getImage();
-        viewHolder.imageButton.setBackground(mContext.getDrawable(image));
-        viewHolder.imageButton.setOnClickListener(new View.OnClickListener() {
+        viewHolder.posterImageButton.setBackground(mContext.getDrawable(image));
+        viewHolder.posterImageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mItemListener.onNoteClick(note);
             }
         });
+
+        if (note.getCompleted()) {
+            viewHolder.completeTextView.setVisibility(View.VISIBLE);
+        } else {
+            viewHolder.completeTextView.setVisibility(View.GONE);
+        }
     }
 
     @Override
@@ -63,11 +70,13 @@ public class NotebookRecyclerViewAdapter extends RecyclerView.Adapter {
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        ImageButton imageButton;
+        ImageButton posterImageButton;
+        TextView completeTextView;
 
         ViewHolder(View v) {
             super(v);
-            imageButton = v.findViewById(R.id.imgae_button);
+            posterImageButton = v.findViewById(R.id.poster_imgae_button);
+            completeTextView = v.findViewById(R.id.complete_textview);
         }
     }
 }
