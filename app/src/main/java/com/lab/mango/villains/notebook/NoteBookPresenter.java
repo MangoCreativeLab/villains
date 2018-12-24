@@ -1,8 +1,8 @@
 package com.lab.mango.villains.notebook;
 
 import com.lab.mango.villains.data.Note;
-import com.lab.mango.villains.data.source.local.remote.NoteDataSource;
-import com.lab.mango.villains.data.source.local.remote.NoteRepository;
+import com.lab.mango.villains.data.source.DataSource;
+import com.lab.mango.villains.data.source.NoteRepository;
 
 import java.util.List;
 
@@ -29,7 +29,7 @@ public class NoteBookPresenter implements NoteBookContract.Presenter {
     @Override
     public void loadNotes() {
 
-        mNoteRepository.getNotes(new NoteDataSource.LoadNoteCallback() {
+        mNoteRepository.getNotes(new DataSource.LoadNoteCallback() {
             @Override
             public void onNotesLoaded(List<Note> notes) {
                 mNoteBookView.showNoteBook(notes);

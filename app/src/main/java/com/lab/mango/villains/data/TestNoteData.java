@@ -5,7 +5,8 @@ import com.lab.mango.villains.R;
 import java.util.ArrayList;
 import java.util.List;
 
-public class VirtualNoteForTest {
+public class TestNoteData {
+
     public static List<Note> getData() {
         List<Note> notes = new ArrayList<>();
 

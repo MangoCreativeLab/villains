@@ -6,7 +6,8 @@ import android.view.MenuItem;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.lab.mango.villains.R;
-import com.lab.mango.villains.data.source.local.remote.NoteRepository;
+import com.lab.mango.villains.data.Injection;
+import com.lab.mango.villains.data.source.NoteRepository;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
@@ -76,7 +77,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        new NoteBookPresenter(NoteRepository.getInstance(),
+        new NoteBookPresenter(Injection.provideNotesRepository(getApplicationContext()),
                 (NoteBookContract.View) notebookFragment);
     }
 

@@ -3,7 +3,7 @@ package com.lab.mango.villains.note.card;
 import android.view.ViewGroup;
 
 import com.lab.mango.villains.data.NoteDetail;
-import com.lab.mango.villains.data.VirtualNoteDetailForTest;
+import com.lab.mango.villains.data.TestNoteDetailData;
 import com.lab.mango.villains.note.NoteFragment;
 
 import java.util.ArrayList;
@@ -16,7 +16,7 @@ import androidx.fragment.app.FragmentStatePagerAdapter;
 
 public class NoteCardFragmentPagerAdapter extends FragmentStatePagerAdapter implements NoteCardAdapter {
 
-    private static int NUM_ITEMS = VirtualNoteDetailForTest.NoteDetailCount;
+    private static int NUM_ITEMS = TestNoteDetailData.NoteDetailCount;
 
     private NoteFragment.NoteDetailItemListener mNoteDetailItemListener;
     private List<NoteCardFragment> mFragments;

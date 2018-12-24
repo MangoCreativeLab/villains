@@ -5,13 +5,12 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.lab.mango.villains.R;
-import com.lab.mango.villains.data.source.local.remote.NoteRepository;
+import com.lab.mango.villains.data.Injection;
+import com.lab.mango.villains.data.source.NoteRepository;
 import com.lab.mango.villains.notedetail.viewpager.NoteDetailPagerAdapter;
 
 import java.util.ArrayList;
 
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.widget.Toolbar;
 import androidx.viewpager.widget.ViewPager;
 
 public class NoteDetailActivity extends androidx.appcompat.app.AppCompatActivity {
@@ -42,7 +41,7 @@ public class NoteDetailActivity extends androidx.appcompat.app.AppCompatActivity
         for (int i = 0; i < 5; i++) {
             NoteDetailFragment fragment = NoteDetailFragment.newInstance();
             fragments.add(fragment);
-            new NoteDetailPresenter(noteDetailId[i], NoteRepository.getInstance(), fragment);
+            new NoteDetailPresenter(noteDetailId[i], Injection.provideNotesRepository(getApplicationContext()), fragment);
         }
 
         final int initPos = getIntent().getExtras().getInt(EXTRA_NOTE_DETAIL_INIT_POS);

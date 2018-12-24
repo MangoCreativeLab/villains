@@ -1,8 +1,8 @@
 package com.lab.mango.villains.notedetail;
 
 import com.lab.mango.villains.data.NoteDetail;
-import com.lab.mango.villains.data.source.local.remote.NoteDataSource;
-import com.lab.mango.villains.data.source.local.remote.NoteRepository;
+import com.lab.mango.villains.data.source.DataSource;
+import com.lab.mango.villains.data.source.NoteRepository;
 
 import androidx.annotation.NonNull;
 
@@ -25,7 +25,7 @@ public class NoteDetailPresenter implements NoteDetailContract.Presenter {
 
     @Override
     public void loadNoteDetail(int noteDetailId) {
-        mNoteRepository.getNoteDetail(new NoteDataSource.LoadNoteDetailCallback() {
+        mNoteRepository.getNoteDetail(new DataSource.LoadNoteDetailCallback() {
             @Override
             public void onNoteDetailLoaded(NoteDetail noteDetail) {
                 mNoteDetailView.showNoteDetail(noteDetail);

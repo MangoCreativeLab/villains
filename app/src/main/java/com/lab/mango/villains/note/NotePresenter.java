@@ -1,8 +1,8 @@
 package com.lab.mango.villains.note;
 
 import com.lab.mango.villains.data.NoteDetail;
-import com.lab.mango.villains.data.source.local.remote.NoteDataSource;
-import com.lab.mango.villains.data.source.local.remote.NoteRepository;
+import com.lab.mango.villains.data.source.DataSource;
+import com.lab.mango.villains.data.source.NoteRepository;
 
 import java.util.List;
 
@@ -34,7 +34,7 @@ public class NotePresenter implements NoteContract.Presenter {
 
     @Override
     public void loadNoteDetails(int noteId) {
-        mNoteRepository.getNoteDetailList(new NoteDataSource.LoadNoteDetailListCallback() {
+        mNoteRepository.getNoteDetailList(new DataSource.LoadNoteDetailListCallback() {
             @Override
             public void onNoteDetailListLoaded(List<NoteDetail> noteDetails) {
                 mNoteDetailView.showNoteDetails(noteDetails);
@@ -51,7 +51,7 @@ public class NotePresenter implements NoteContract.Presenter {
 
     @Override
     public void loadNoteDetails(final NoteDetail clickedDetail) {
-        mNoteRepository.getNoteDetailList(new NoteDataSource.LoadNoteDetailListCallback() {
+        mNoteRepository.getNoteDetailList(new DataSource.LoadNoteDetailListCallback() {
             @Override
             public void onNoteDetailListLoaded(List<NoteDetail> noteDetails) {
                 mNoteDetailView.startNoteDetail(noteDetails, clickedDetail);
