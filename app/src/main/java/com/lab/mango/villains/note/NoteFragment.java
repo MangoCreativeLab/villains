@@ -145,14 +145,12 @@ public class NoteFragment extends Fragment implements NoteContract.View {
         // get limit pos
         int limitPos = 0;
         for (int i = 0; i < noteDetails.size(); i++) {
-            limitPos = i;
-            if (!noteDetails.get(i).getPrepared()) {
-                break;
+            if (noteDetails.get(i).getPrepared()) {
+                limitPos++;
             }
         }
 
         // get start pos
-        Log.d("MY_LOG", "limitPos : " + limitPos);
         int initPosition = 0;
         int[] detailIds = new int[limitPos];
         for (int i = 0; i < detailIds.length; i++) {

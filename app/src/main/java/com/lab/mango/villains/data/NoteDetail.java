@@ -1,5 +1,6 @@
 package com.lab.mango.villains.data;
 
+import java.util.List;
 import java.util.UUID;
 
 import androidx.annotation.Nullable;
@@ -35,7 +36,7 @@ public class NoteDetail {
     private final String mHint;
 
     @ColumnInfo(name = "youtubelink")
-    private final String mYoutubeUrl;
+    private final List<String> mYoutubeUrl;
 
     @ColumnInfo(name = "completed")
     private final boolean mCompleted;
@@ -44,12 +45,12 @@ public class NoteDetail {
     private final boolean mPrepared;
 
     @Ignore
-    public NoteDetail(@Nullable int noteId, @Nullable String title, @Nullable String description, String hint, String youtubeUrl, boolean completed, boolean prepared) {
+    public NoteDetail(@Nullable int noteId, @Nullable String title, @Nullable String description, String hint, List<String> youtubeUrl, boolean completed, boolean prepared) {
         this(noteId, title, description, UUID.randomUUID().hashCode(), hint, youtubeUrl, completed, prepared);
     }
 
     public NoteDetail(@Nullable int noteId, @Nullable String title, @Nullable String description,
-                      int id, String hint, String youtubeUrl, boolean completed, boolean prepared) {
+                      int id, String hint, List<String> youtubeUrl, boolean completed, boolean prepared) {
         mId = id;
         mNoteId = noteId;
         mTitle = title;
@@ -80,7 +81,7 @@ public class NoteDetail {
         return mHint;
     }
 
-    public String getYoutubeUrl() {
+    public List<String> getYoutubeUrl() {
         return mYoutubeUrl;
     }
 

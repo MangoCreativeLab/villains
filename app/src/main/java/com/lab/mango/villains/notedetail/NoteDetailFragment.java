@@ -11,33 +11,25 @@ import android.view.WindowManager;
 import com.lab.mango.villains.R;
 import com.lab.mango.villains.data.NoteDetail;
 import com.lab.mango.villains.notedetail.answer.AnswerDialogFragment;
-import com.lab.mango.villains.notedetail.youtube.CustomPlayerUIController;
-import com.pierfrancescosoffritti.androidyoutubeplayer.player.IFramePlayerOptions;
-import com.pierfrancescosoffritti.androidyoutubeplayer.player.YouTubePlayer;
-import com.pierfrancescosoffritti.androidyoutubeplayer.player.YouTubePlayerView;
-import com.pierfrancescosoffritti.androidyoutubeplayer.player.listeners.AbstractYouTubePlayerListener;
-import com.pierfrancescosoffritti.androidyoutubeplayer.player.listeners.YouTubePlayerFullScreenListener;
-import com.pierfrancescosoffritti.androidyoutubeplayer.player.listeners.YouTubePlayerInitListener;
+import com.lab.mango.villains.notedetail.youtube.NoteDetailRecyclerViewAdapter;
+
+import java.util.ArrayList;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 public class NoteDetailFragment extends Fragment implements NoteDetailContract.View {
 
     private NoteDetailContract.Presenter mPresenter;
 
-    // https://github.com/PierfrancescoSoffritti/android-youtube-player
-    private YouTubePlayerView mYoutubePlayerView;
+    private RecyclerView mRecyclerView;
 
-    private YouTubePlayer mYouTubePlayer;
-
-    private CustomPlayerUIController mCustomPlayerUIController;
-
-    private YouTubePlayerFullScreenListener mYouTubePlayerFullScreenListener;
-
-    private IFramePlayerOptions mFramePlayerOptions;
+    private NoteDetailRecyclerViewAdapter mAdapter;
 
     public static NoteDetailFragment newInstance() {
         NoteDetailFragment fragment = new NoteDetailFragment();
@@ -56,12 +48,21 @@ public class NoteDetailFragment extends Fragment implements NoteDetailContract.V
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.note_detail_fragment, container, false);
+        mRecyclerView = view.findViewById(R.id.recycler_view);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false);
+        mRecyclerView.setLayoutManager(layoutManager);
+        mAdapter = new NoteDetailRecyclerViewAdapter(getContext(), this.getLifecycle(), new ArrayList<String>(), new NoteDetailRecyclerViewAdapter.ItemListener() {
 
-        mYoutubePlayerView = view.findViewById(R.id.youtube_player_view);
-        getLifecycle().addObserver(mYoutubePlayerView);
+            @Override
+            public void onYouTubePlayerEnterFullScreen() {
+                setFullScreen(true);
+            }
 
-        mYoutubePlayerView.inflateCustomPlayerUI(R.layout.note_detail_youtube_player_ui);
-        mCustomPlayerUIController = new CustomPlayerUIController(mYoutubePlayerView, new CustomPlayerUIController.AnswerButtonClickListener() {
+            @Override
+            public void onYouTubePlayerExitFullScreen() {
+                setFullScreen(false);
+            }
+
             @Override
             public void onAnswerButtonClick() {
                 AnswerDialogFragment fragment = AnswerDialogFragment.newInstance();
@@ -72,41 +73,23 @@ public class NoteDetailFragment extends Fragment implements NoteDetailContract.V
             }
         });
 
-        mYouTubePlayerFullScreenListener = new YouTubePlayerFullScreenListener() {
-            @Override
-            public void onYouTubePlayerEnterFullScreen() {
-                setFullScreen(true);
-            }
+        mRecyclerView.setAdapter(mAdapter);
 
-            @Override
-            public void onYouTubePlayerExitFullScreen() {
-                setFullScreen(false);
-            }
-        };
-
-        mYoutubePlayerView.addFullScreenListener(mYouTubePlayerFullScreenListener);
-        if (isFullScreen()) {
-            mYoutubePlayerView.enterFullScreen();
-        }
-
-        // https://developers.google.com/youtube/player_parameters#Parameters
-        mFramePlayerOptions = new IFramePlayerOptions.Builder()
-                .controls(0)
-                .modestBranding(1)
-                .rel(0)
-                .showInfo(0)
-                .build();
-
-        ((NoteDetailActivity) getActivity()).setOnBackClickListener(new NoteDetailActivity.OnBackClickListener() {
-            @Override
-            public boolean onBackClick() {
-                if (isFullScreen()) {
-                    mYoutubePlayerView.exitFullScreen();
-                    return true;
-                }
-                return false;
-            }
-        });
+//        mYoutubePlayerView.addFullScreenListener(mYouTubePlayerFullScreenListener);
+//        if (isFullScreen()) {
+//            mYoutubePlayerView.enterFullScreen();
+//        }
+//
+//        ((NoteDetailActivity) getActivity()).setOnBackClickListener(new NoteDetailActivity.OnBackClickListener() {
+//            @Override
+//            public boolean onBackClick() {
+//                if (isFullScreen()) {
+//                    mYoutubePlayerView.exitFullScreen();
+//                    return true;
+//                }
+//                return false;
+//            }
+//        });
 
         return view;
     }
@@ -128,15 +111,14 @@ public class NoteDetailFragment extends Fragment implements NoteDetailContract.V
         if (isVisibleToUser) {
             mPresenter.start();
         } else {
-            pausePlayer();
+            if (mAdapter != null) {
+                mAdapter.pausePlayer();
+            }
         }
     }
 
     @Override
     public void onDestroyView() {
-        mYoutubePlayerView.removeFullScreenListener(mYouTubePlayerFullScreenListener);
-        mYoutubePlayerView.release();
-        mYouTubePlayer = null;
         super.onDestroyView();
     }
 
@@ -151,45 +133,10 @@ public class NoteDetailFragment extends Fragment implements NoteDetailContract.V
             return;
         }
 
-        if (mYouTubePlayer != null) {
-            return;
+        if (getUserVisibleHint()) {
+            ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(noteDetail.getTitle());
         }
-
-        mYoutubePlayerView.initialize(new YouTubePlayerInitListener() {
-            @Override
-            public void onInitSuccess(@NonNull final YouTubePlayer initializedYouTubePlayer) {
-
-                initializedYouTubePlayer.addListener(mCustomPlayerUIController);
-                initializedYouTubePlayer.addListener(new AbstractYouTubePlayerListener() {
-                    @Override
-                    public void onReady() {
-                        mYouTubePlayer = initializedYouTubePlayer;
-
-                        mCustomPlayerUIController.setYouTubePlayer(initializedYouTubePlayer);
-                        String videoId = noteDetail.getYoutubeUrl();
-//                        initializedYouTubePlayer.loadVideo(videoId, 0);
-                        initializedYouTubePlayer.cueVideo(videoId, 0);
-                        pausePlayer();
-
-                    }
-                });
-            }
-        }, true, mFramePlayerOptions);
-    }
-
-    private void pausePlayer() {
-        if (mYoutubePlayerView == null) {
-            return;
-        }
-
-        mYoutubePlayerView.post(new Runnable() {
-            @Override
-            public void run() {
-                if (mYouTubePlayer != null) {
-                    mYouTubePlayer.pause();
-                }
-            }
-        });
+        mAdapter.setYoutubeUrl(noteDetail.getYoutubeUrl());
     }
 
     private void setFullScreen(boolean fullscreen) {
@@ -219,10 +166,10 @@ public class NoteDetailFragment extends Fragment implements NoteDetailContract.V
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
-        if (isFullScreen()) {
-            mYoutubePlayerView.enterFullScreen();
-        } else {
-            mYoutubePlayerView.exitFullScreen();
-        }
+//        if (isFullScreen()) {
+//            mYoutubePlayerView.enterFullScreen();
+//        } else {
+//            mYoutubePlayerView.exitFullScreen();
+//        }
     }
 }

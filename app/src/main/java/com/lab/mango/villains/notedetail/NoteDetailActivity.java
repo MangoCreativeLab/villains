@@ -12,6 +12,8 @@ import com.lab.mango.villains.notedetail.viewpager.NoteDetailPagerAdapter;
 
 import java.util.ArrayList;
 
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.widget.Toolbar;
 import androidx.viewpager.widget.ViewPager;
 
 public class NoteDetailActivity extends androidx.appcompat.app.AppCompatActivity {
@@ -27,15 +29,15 @@ public class NoteDetailActivity extends androidx.appcompat.app.AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.note_detail_activity);
 
-//        Toolbar toolbar = findViewById(R.id.toolbar);
-//        setSupportActionBar(toolbar);
-//
-//        final String title = getIntent().getExtras().getString(EXTRA_TITLE);
-//        ActionBar actionBar = getSupportActionBar();
-//        actionBar.setTitle(title);
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        final String title = getIntent().getExtras().getString(EXTRA_TITLE);
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setTitle(title);
 
         mViewPager = findViewById(R.id.view_pager);
-
+        mViewPager.setOffscreenPageLimit(5);
         ArrayList<NoteDetailFragment> fragments = new ArrayList<>();
 
         final int[] noteDetailId = getIntent().getExtras().getIntArray(EXTRA_NOTE_DETAIL_IDs);
