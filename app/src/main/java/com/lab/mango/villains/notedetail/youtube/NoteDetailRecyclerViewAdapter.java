@@ -23,6 +23,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 public class NoteDetailRecyclerViewAdapter extends RecyclerView.Adapter {
 
+    private int mQuestionType = 0;
+
     private Context mContext;
     private Lifecycle mLifecycle;
     private ArrayList<String> mYoutubeUrl;
@@ -58,7 +60,7 @@ public class NoteDetailRecyclerViewAdapter extends RecyclerView.Adapter {
         CustomPlayerUIController.AnswerButtonClickListener answerButtonClickListener = new CustomPlayerUIController.AnswerButtonClickListener() {
             @Override
             public void onAnswerButtonClick() {
-                mItemListener.onAnswerButtonClick();
+                mItemListener.onAnswerButtonClick(mQuestionType);
             }
         };
 
@@ -102,6 +104,10 @@ public class NoteDetailRecyclerViewAdapter extends RecyclerView.Adapter {
     public void pausePlayer() {
         mIsPause = true;
         notifyDataSetChanged();
+    }
+
+    public void setQuestionType(int id) {
+        mQuestionType = id;
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
@@ -167,6 +173,6 @@ public class NoteDetailRecyclerViewAdapter extends RecyclerView.Adapter {
 
         void onYouTubePlayerExitFullScreen();
 
-        void onAnswerButtonClick();
+        void onAnswerButtonClick(int questionType);
     }
 }

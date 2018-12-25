@@ -44,13 +44,22 @@ public class NoteDetail {
     @ColumnInfo(name = "prepared")
     private final boolean mPrepared;
 
+    @ColumnInfo(name = "questiontype")
+    private final int mQuestionType;
+
+    @ColumnInfo(name = "answer")
+    private final String mAnswer;
+
     @Ignore
-    public NoteDetail(@Nullable int noteId, @Nullable String title, @Nullable String description, String hint, List<String> youtubeUrl, boolean completed, boolean prepared) {
-        this(noteId, title, description, UUID.randomUUID().hashCode(), hint, youtubeUrl, completed, prepared);
+    public NoteDetail(@Nullable int noteId,
+                      @Nullable String title, @Nullable String description,
+                      String hint, List<String> youtubeUrl, boolean completed, boolean prepared,
+                      int questionType, String answer) {
+        this(noteId, title, description, UUID.randomUUID().hashCode(), hint, youtubeUrl, completed, prepared, questionType, answer);
     }
 
     public NoteDetail(@Nullable int noteId, @Nullable String title, @Nullable String description,
-                      int id, String hint, List<String> youtubeUrl, boolean completed, boolean prepared) {
+                      int id, String hint, List<String> youtubeUrl, boolean completed, boolean prepared, int questionType, String answer) {
         mId = id;
         mNoteId = noteId;
         mTitle = title;
@@ -59,6 +68,8 @@ public class NoteDetail {
         mYoutubeUrl = youtubeUrl;
         mCompleted = completed;
         mPrepared = prepared;
+        mQuestionType = questionType;
+        mAnswer = answer;
     }
 
     public int getId() {
@@ -91,5 +102,13 @@ public class NoteDetail {
 
     public boolean getPrepared() {
         return mPrepared;
+    }
+
+    public int getQuestionType() {
+        return mQuestionType;
+    }
+
+    public String getAnswer() {
+        return mAnswer;
     }
 }

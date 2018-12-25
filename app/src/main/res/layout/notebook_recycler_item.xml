@@ -20,6 +20,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/complete_background"
+        android:textSize="30dp"
         android:gravity="center"
         android:padding="50dp"
         android:text="검거 완료"

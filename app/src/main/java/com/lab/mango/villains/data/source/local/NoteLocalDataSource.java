@@ -1,5 +1,7 @@
 package com.lab.mango.villains.data.source.local;
 
+import android.util.Log;
+
 import com.lab.mango.villains.data.Note;
 import com.lab.mango.villains.data.NoteDetail;
 import com.lab.mango.villains.data.source.DataSource;

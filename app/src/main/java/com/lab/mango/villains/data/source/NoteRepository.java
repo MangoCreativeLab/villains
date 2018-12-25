@@ -25,10 +25,6 @@ public class NoteRepository implements DataSource {
         return INSTANCE;
     }
 
-    public static void destroyInstance() {
-        INSTANCE = null;
-    }
-
     @Override
     public void getNotes(@NonNull final LoadNoteCallback callback) {
         mNoteLocalDataSource.getNotes(new LoadNoteCallback() {

@@ -40,6 +40,26 @@ public class NoteDetailPresenter implements NoteDetailContract.Presenter {
     }
 
     @Override
+    public void updateAnswer(final String result) {
+        mNoteRepository.getNoteDetail(new DataSource.LoadNoteDetailCallback() {
+            @Override
+            public void onNoteDetailLoaded(NoteDetail noteDetail) {
+                if (noteDetail.getAnswer().equals(result)) {
+                    mNoteRepository.completeNoteDetail(noteDetail);
+                    mNoteDetailView.showSolveQuestion();
+                } else {
+                    mNoteDetailView.showNotSolveQuestion();
+                }
+            }
+
+            @Override
+            public void onDataNotAvailable() {
+
+            }
+        }, mNoteDetailId);
+    }
+
+    @Override
     public void start() {
         loadNoteDetail(mNoteDetailId);
     }

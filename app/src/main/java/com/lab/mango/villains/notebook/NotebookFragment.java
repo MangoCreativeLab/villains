@@ -2,6 +2,8 @@ package com.lab.mango.villains.notebook;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -66,10 +68,19 @@ public class NotebookFragment extends Fragment implements NoteBookContract.View 
     public void onResume() {
         super.onResume();
         mPresenter.start();
+
+        // TODO : handler is unnecessary, it's just because of preSaved test data.
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                mPresenter.start();
+            }
+        }, 100);
     }
 
     @Override
     public void showNoteBook(List<Note> notes) {
+        Log.d("MY_LOG", "showNoteBook : " + notes);
         mAdapter.replaceData(notes);
     }
 
